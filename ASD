@@ -206,38 +206,26 @@ local function BLMIE_fake_script() -- TSBYPASS.Script
 	end
 end
 coroutine.wrap(BLMIE_fake_script)()
-local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local function ABAYPOT_fake_script() -- Reaver.Script 
+	local script = Instance.new('Script', Reaver)
 
-local holdingF = false
-local moveName = "RiftSlice"
-local args = {
+	-- Get the TextButton
+	local textButton = script.Parent -- Assuming this script is a child of the TextButton
+	
+	-- Define the arguments
+	local args = {
     [1] = "Alternate",
+    [2] = "RiftSlice"
 }
 
--- Function to trigger the move
-local function triggerMove()
-    while holdingF do
-        args[2] = moveName
-        ReplicatedStorage:WaitForChild("Main"):WaitForChild("Input"):FireServer(unpack(args))
-        wait(0.1)  -- Adjust the delay as needed
-    end
+game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Input"):FireServer(unpack(args))
+
+	-- Set up the MouseButton1Click event
+	textButton.MouseButton1Click:Connect(function()
+		remoteEvent:FireServer(unpack(args))
+	end)
+	
 end
-
--- Detect when F key is pressed
-UserInputService.InputBegan:Connect(function(input, isProcessed)
-    if not isProcessed and input.KeyCode == Enum.KeyCode.F then
-        holdingF = true
-        triggerMove()
-    end
-end)
-
--- Detect when F key is released
-UserInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.F then
-        holdingF = false
-    end
-end)
 coroutine.wrap(ABAYPOT_fake_script)()
 local function FXJY_fake_script() -- HG.Script 
 	local script = Instance.new('Script', HG)
