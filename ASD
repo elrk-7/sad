@@ -75,17 +75,17 @@ TSBYPASS.Text = "TSB"
 TSBYPASS.TextColor3 = Color3.fromRGB(255, 255, 255)
 TSBYPASS.TextSize = 14.000
 
-BLOCK.Name = "BLOCK"
-BLOCK.Parent = Frame
-BLOCK.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-BLOCK.BorderColor3 = Color3.fromRGB(255, 255, 255)
-BLOCK.BorderSizePixel = 2
-BLOCK.Position = UDim2.new(0.0179787129, 0, 0.58658576, 0)
-BLOCK.Size = UDim2.new(0, 58, 0, 43)
-BLOCK.Font = Enum.Font.Unknown
-BLOCK.Text = "BLOCK"
-BLOCK.TextColor3 = Color3.fromRGB(255, 255, 255)
-BLOCK.TextSize = 12.000
+Reaver.Name = "Reaver"
+Reaver.Parent = Frame
+Reaver.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Reaver.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Reaver.BorderSizePixel = 2
+Reaver.Position = UDim2.new(0.0179787129, 0, 0.58658576, 0)
+Reaver.Size = UDim2.new(0, 58, 0, 43)
+Reaver.Font = Enum.Font.Unknown
+Reaver.Text = "BLOCK"
+Reaver.TextColor3 = Color3.fromRGB(255, 255, 255)
+Reaver.TextSize = 12.000
 
 HG.Name = "HG"
 HG.Parent = Frame
@@ -206,27 +206,38 @@ local function BLMIE_fake_script() -- TSBYPASS.Script
 	end
 end
 coroutine.wrap(BLMIE_fake_script)()
-local function ABAYPOT_fake_script() -- BLOCK.Script 
-	local script = Instance.new('Script', BLOCK)
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-	-- Get the TextButton
-	local textButton = script.Parent -- Assuming this script is a child of the TextButton
-	
-	-- Define the arguments
-	local args = {
-		[1] = "Alternate",
-		[2] = "Block"
-	}
-	
-	-- Get the RemoteEvent
-	local remoteEvent = game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Input")
-	
-	-- Set up the MouseButton1Click event
-	textButton.MouseButton1Click:Connect(function()
-		remoteEvent:FireServer(unpack(args))
-	end)
-	
+local holdingF = false
+local moveName = "RiftSlice"
+local args = {
+    [1] = "Alternate",
+}
+
+-- Function to trigger the move
+local function triggerMove()
+    while holdingF do
+        args[2] = moveName
+        ReplicatedStorage:WaitForChild("Main"):WaitForChild("Input"):FireServer(unpack(args))
+        wait(0.1)  -- Adjust the delay as needed
+    end
 end
+
+-- Detect when F key is pressed
+UserInputService.InputBegan:Connect(function(input, isProcessed)
+    if not isProcessed and input.KeyCode == Enum.KeyCode.F then
+        holdingF = true
+        triggerMove()
+    end
+end)
+
+-- Detect when F key is released
+UserInputService.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.F then
+        holdingF = false
+    end
+end)
 coroutine.wrap(ABAYPOT_fake_script)()
 local function FXJY_fake_script() -- HG.Script 
 	local script = Instance.new('Script', HG)
